@@ -22,6 +22,17 @@ async def neko(ctx):
     await ctx.send('にゃーん')
 
     
+async def reply(message):
+    reply = f'{message.author.mention} 呼んだ？' # 返信メッセージの作成
+    await message.channel.send(reply) # 返信メッセージを送信
+
+# 発言時に実行されるイベントハンドラを定義
+@client.event
+async def on_message(message):
+    if client.user in message.mentions: # 話しかけられたかの判定
+        await reply(message) # 返信する非同期関数を実行
+        
+    
 ID_CHANNEL_WELCOME = 727774858934616098 # 入室用チャンネルのID(int)
 ID_ROLE_WELCOME = 753928046549008455 # 付けたい役職のID(int)
 EMOJI_WELCOME = '✅' # 対応する絵文字
