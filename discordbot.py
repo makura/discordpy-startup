@@ -21,47 +21,5 @@ async def ping(ctx):
 async def neko(ctx):
     await ctx.send('にゃーん')
 
-    
-async def reply(message):
-    reply = f'{message.author.mention} 呼んだ？' # 返信メッセージの作成
-    await message.channel.send(reply) # 返信メッセージを送信
-
-# 発言時に実行されるイベントハンドラを定義
-@client.event
-async def on_message(message):
-    if client.user in message.mentions: # 話しかけられたかの判定
-        await reply(message) # 返信する非同期関数を実行
-        
-    
-ID_CHANNEL_WELCOME = 727774858934616098 # 入室用チャンネルのID(int)
-ID_ROLE_WELCOME = 753928046549008455 # 付けたい役職のID(int)
-EMOJI_WELCOME = '✅' # 対応する絵文字
-
-# 役職を付与する非同期関数を定義
-async def grant_role(payload):
-    # 絵文字が異なる場合は処理を打ち切る
-    if payload.emoji.name != EMOJI_WELCOME: 
-        return
-
-    # チャンネルが異なる場合は処理を打ち切る
-    channel = client.get_channel(payload.channel_id)
-    if channel.id != ID_CHANNEL_README:
-        return
-
-    # Member オブジェクトと Role オブジェクトを取得して役職を付与
-    member = channel.guild.get_member(payload.user_id)
-    role = guild.get_role(ID_ROLE_WELCOME)
-    await member.add_roles(role)
-    return member
-
-# リアクション追加時に実行されるイベントハンドラを定義
-@client.event
-async def on_raw_reaction_add(payload):
-    # 役職を付与する非同期関数を実行して Optional[Member] オブジェクトを取得
-    member = await grant_role(payload)
-    if member is not None: # 役職を付与したメンバーがいる時
-        text = f'{member.mention} ようこそ！'
-        await message.channel.send(text)
-
 
 bot.run(token)
